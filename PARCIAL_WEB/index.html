@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Información de Personajes de Rick and Morty</title>
+    <link rel="icon" type="image/png" href="C:\Users\Juan Pablo\claseG\PARCIAL_WEB\images.png"> 
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url("C:\Users\Juan Pablo\claseG\PARCIAL_WEB\backgorund.jpg");
+            background-size: cover;
+            background-color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            width: 90%;
+            padding: 20px;
+            background-color: #15daec;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #343a40;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Se ajusta automáticamente al tamaño de la pantalla */
+            gap: 20px;
+            justify-content: center;
+        }
+        .character {
+            background-color: #fff;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .character:hover {
+            transform: scale(1.03);
+        }
+        .character img {
+            width: 100%;
+            height: auto;
+            max-height: 200px;
+            object-fit: contain;
+            border-radius: 5px 5px 0 0;
+        }
+        .character-content {
+            padding: 20px;
+            text-align: center;
+        }
+        .character h2 {
+            margin-top: 0;
+            font-size: 24px;
+            color: #081fc6;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .character p {
+            margin-bottom: 5px;
+            color: #000000;
+        }
+        .character-info {
+            background-color: #f8f9fa;
+            border-top: 1px solid #ced4da;
+            padding: 15px;
+            border-radius: 0 0 5px 5px;
+        }
+        .character-info p {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .character-info p:last-child {
+            margin-bottom: 0;
+        }
+        .character-info p span {
+            color: #343a40;
+            font-weight: normal;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Rick And Morty Pedia</h1>
+
+        <div class="characters-grid" id="charactersContainer">
+        </div>
+    </div>
+
+    <script>
+                document.addEventListener("DOMContentLoaded", () => {
+            const charactersContainer = document.getElementById("charactersContainer");
+
+            fetch("https://rickandmortyapi.com/api/character/")
+                .then(response => response.json())
+                .then(data => {
+                    const characters = data.results;
+
+                    characters.forEach(character => {
+                        const characterDiv = document.createElement("div");
+                        characterDiv.classList.add("character");
+
+                        const image = document.createElement("img");
+                        image.src = character.image;
+                        image.alt = character.name;
+
+                        const characterContent = document.createElement("div");
+                        characterContent.classList.add("character-content");
+
+                        const name = document.createElement("h2");
+                        name.textContent = character.name;
+
+                        const status = document.createElement("p");
+                        status.textContent = `Status: ${character.status}`;
+
+                        const species = document.createElement("p");
+                        species.textContent = `Species: ${character.species}`;
+
+                        const gender = document.createElement("p");
+                        gender.textContent = `Gender: ${character.gender}`;
+
+                        const origin = document.createElement("p");
+                        origin.textContent = `Origin: ${character.origin.name}`;
+
+                        const location = document.createElement("p");
+                        location.textContent = `Location: ${character.location.name}`;
+
+                        characterContent.appendChild(name);
+                        characterContent.appendChild(status);
+                        characterContent.appendChild(species);
+                        characterContent.appendChild(gender);
+                        characterContent.appendChild(origin);
+                        characterContent.appendChild(location);
+
+                        const characterInfo = document.createElement("div");
+                        characterInfo.classList.add("character-info");
+                        characterInfo.appendChild(characterContent);
+
+                        characterDiv.appendChild(image);
+                        characterDiv.appendChild(characterInfo);
+
+                        charactersContainer.appendChild(characterDiv);
+                    });
+                })
+                .catch(error => console.error("Error al obtener datos de la API:", error));
+        });
+
+    </script>
+</body>
+</html>
